@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="b29851d9c528e616f649268accc041fb386371fb">
+        <dex dex="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_d34bc082d15f1427198c333d5cf9d0fae9e3b54c.jar" />
+    </item>
+
+</items>
