@@ -86,14 +86,13 @@ public class MainActivity extends AppCompatActivity {
                         // Till end of this view has been scrolled
                         if (CheckNetworkConnection.isNetworkAvailable(MainActivity.this) && !sortCriteria.equals("--")) {
                             new DiscoverMovies().execute(AppConstants.BASE_PATH_DISCOVER + "&sort_by=" + sortCriteria + "&page=" + page++);
-                        } else {
-                            Snackbar.make(moviePosters, "Cannot load more movies...", Snackbar.LENGTH_LONG).show();
                         }
                     }
                 }
             });
         } else {
             if (CheckNetworkConnection.isNetworkAvailable(this) && !sortCriteria.equals("--")) {
+                isOfflineOrFav = false;
                 new DiscoverMovies().execute(AppConstants.BASE_PATH_DISCOVER + "&sort_by=" + sortCriteria);
             } else {
                 isOfflineOrFav = true;
@@ -172,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
         public void onPostExecute(ArrayList<MovieData> result) {
             if(moviePosters.getAdapter() == null) {
                 data = result;
+                isOfflineOrFav = false;
                 moviePosters.setAdapter(new PosterGridAdapter(MainActivity.this, data, false));
             } else {
                 data.addAll(result);
@@ -256,11 +256,13 @@ public class MainActivity extends AppCompatActivity {
             switch (menuItem.getItemId()) {
                 case R.id.most_popular:
                     sortCriteria = "popularity.desc";
+                    moviePosters.setAdapter(null);
                     new DiscoverMovies().execute(AppConstants.BASE_PATH_DISCOVER + "&sort_by=" + sortCriteria + "&page=" + page++);
                     break;
 
                 case R.id.highest_rated:
                     sortCriteria = "vote_average.desc";
+                    moviePosters.setAdapter(null);
                     new DiscoverMovies().execute(AppConstants.BASE_PATH_DISCOVER + "&sort_by=" + sortCriteria + "&page=" + page++);
                     break;
 

@@ -82,8 +82,8 @@ public class DetailsMainFragment extends Fragment implements AppBarLayout.OnOffs
         new TrailerFetch().execute(AppConstants.BASE_PATH_TRAILER.replace("**", movieData.getId()));
         new ReviewsFetch().execute(AppConstants.BASE_REVIEWS_PATH.replace("**", movieData.getId()));
 
-        if(CheckNetworkConnection.isNetworkAvailable(getActivity())) {
-            Picasso.with(getActivity()).load(AppConstants.BASE_IMAGE_PATH + movieData.getBackdrop_path()).placeholder(R.color.colorAccent).into(imageDrop);
+        if(CheckNetworkConnection.isNetworkAvailable(getActivity()) && !isOfflineOrFav) {
+            Picasso.with(getActivity()).load(AppConstants.BASE_IMAGE_PATH + movieData.getBackdrop_path()).placeholder(R.color.colorAccent).error(R.mipmap.ic_launcher).into(imageDrop);
         } else if(isOfflineOrFav) {
             Cursor cursor = getActivity().getContentResolver().query(MovieContract.Favourites.CONTENT_URI, null, MovieContract.Favourites.MOVIE_ID + "=" + movieData.getId(), null, null);
             if(cursor != null && cursor.moveToFirst()) {

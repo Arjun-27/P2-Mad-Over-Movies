@@ -66,6 +66,7 @@ public class PosterGridAdapter extends BaseAdapter {
             Picasso.with(activity)
                     .load(AppConstants.BASE_IMAGE_PATH + posterData.get(position).getPoster_path())
                     .placeholder(R.drawable.placeholder)
+                    .error(R.mipmap.ic_launcher)
                     .into(poster);
         }
         return poster;
