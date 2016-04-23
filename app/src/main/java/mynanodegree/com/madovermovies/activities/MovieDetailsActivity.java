@@ -25,4 +25,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     .commit();
         }
     }
+
+
 }

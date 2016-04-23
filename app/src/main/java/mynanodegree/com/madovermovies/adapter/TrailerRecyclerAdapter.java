@@ -49,6 +49,13 @@ public class TrailerRecyclerAdapter extends RecyclerView.Adapter<TrailerViewHold
             }
         });
 
+        holder.trailerName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                watchTrailer(AppConstants.BASE_YOUTUBE_PATH + keys.get(holder.getAdapterPosition()).split("\\|")[0]);
+            }
+        });
+
         holder.shareTrailer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,8 +78,8 @@ public class TrailerRecyclerAdapter extends RecyclerView.Adapter<TrailerViewHold
 
     private void shareTrailer(String url) {
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_TEXT, url + "\n\n --MadOverMovies :D");
+        intent.putExtra(Intent.EXTRA_TEXT, url + activity.getString(R.string.str_app_share));
         intent.setType("text/plain");
-        activity.startActivity(Intent.createChooser(intent, "Share trailer..."));
+        activity.startActivity(Intent.createChooser(intent, activity.getString(R.string.str_share_trailer)));
     }
 }

@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +43,9 @@ import mynanodegree.com.madovermovies.data.MovieContract;
 public class MainActivity extends AppCompatActivity {
 
     private GridView moviePosters;
+    private SwipeRefreshLayout refreshLayout;
     private ArrayList<MovieData> data;
+    private TextView emptyView;
     private int page = 2, pos;
     private boolean isLoading = false, stateRestored = false, isTwoPane = false, isOfflineOrFav = false;
     private String sortCriteria = "popularity.desc";
@@ -53,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
         moviePosters = (GridView) findViewById(R.id.gridPosters);
         data = new ArrayList<>();
 
+        emptyView = (TextView)findViewById(android.R.id.empty);
+        moviePosters.setEmptyView(emptyView);
+
         if (findViewById(R.id.movie_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-w900dp).
@@ -60,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             // activity should be in two-pane mode.
             isTwoPane = true;
         }
+        refreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeToRefresh);
 
         if(savedInstanceState != null) {
             data = savedInstanceState.getParcelableArrayList("movieList");
@@ -78,6 +87,10 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onScrollStateChanged(AbsListView view, int scrollState) {
                     pos = view.getLastVisiblePosition();
+                    if(view.getFirstVisiblePosition() < 4)
+                        refreshLayout.setEnabled(true);
+                    else
+                        refreshLayout.setEnabled(false);
                 }
 
                 @Override
@@ -96,9 +109,40 @@ public class MainActivity extends AppCompatActivity {
                 new DiscoverMovies().execute(AppConstants.BASE_PATH_DISCOVER + "&sort_by=" + sortCriteria);
             } else {
                 isOfflineOrFav = true;
-                Snackbar.make(moviePosters, "No Internet Connection", Snackbar.LENGTH_LONG).show();
+                emptyView.setText(R.string.str_no_internet);
             }
         }
+
+        refreshLayout.setNestedScrollingEnabled(true);
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(!sortCriteria.equals("--")) {
+                    if(CheckNetworkConnection.isNetworkAvailable(MainActivity.this)) {
+                        emptyView.setText(R.string.str_refreshing);
+                        isOfflineOrFav = false;
+                        data.clear();
+                        if(moviePosters.getAdapter() != null)
+                            ((BaseAdapter) moviePosters.getAdapter()).notifyDataSetChanged();
+                        new DiscoverMovies().execute(AppConstants.BASE_PATH_DISCOVER + "&sort_by=" + sortCriteria + "&page=" + 1);
+                    } else {
+                        isOfflineOrFav = true;
+                        emptyView.setText(R.string.str_no_internet);
+                    }
+                }
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(isLoading)
+                            new Handler().postDelayed(this, 900);
+                        else
+                            refreshLayout.setRefreshing(false);
+                    }
+                }, 900);
+            }
+        });
 
         moviePosters.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -189,16 +233,21 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                        boolean isSwipeEnabled = false;
                         if (firstVisibleItem + visibleItemCount >= totalItemCount && !isLoading && view.getAdapter().getCount() != 0) {
                             // Till end of this view has been scrolled
                             if (CheckNetworkConnection.isNetworkAvailable(MainActivity.this) && !sortCriteria.equals("--")) {
                                 isOfflineOrFav = false;
                                 new DiscoverMovies().execute(AppConstants.BASE_PATH_DISCOVER + "&sort_by=" + sortCriteria + "&page=" + page++);
-                            } else {
+                            } else if(sortCriteria.equals("--")) {
                                 isOfflineOrFav = true;
-                                Snackbar.make(moviePosters, "Cannot load more movies...", Snackbar.LENGTH_LONG).show();
+                            } else {
+                                Snackbar.make(moviePosters, R.string.str_cant_load_movies, Snackbar.LENGTH_LONG).show();
                             }
                         }
+                        if(view.getChildCount() > 0 && view.getFirstVisiblePosition() == 0 && view.getChildAt(0).getTop() == 0)
+                            isSwipeEnabled = true;
+                        refreshLayout.setEnabled(isSwipeEnabled);
                     }
                 });
             }
@@ -257,17 +306,24 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.most_popular:
                     sortCriteria = "popularity.desc";
                     moviePosters.setAdapter(null);
-                    new DiscoverMovies().execute(AppConstants.BASE_PATH_DISCOVER + "&sort_by=" + sortCriteria + "&page=" + page++);
+                    if(CheckNetworkConnection.isNetworkAvailable(MainActivity.this))
+                        new DiscoverMovies().execute(AppConstants.BASE_PATH_DISCOVER + "&sort_by=" + sortCriteria + "&page=" + page++);
+                    else
+                        emptyView.setText(R.string.str_no_internet);
                     break;
 
                 case R.id.highest_rated:
                     sortCriteria = "vote_average.desc";
                     moviePosters.setAdapter(null);
-                    new DiscoverMovies().execute(AppConstants.BASE_PATH_DISCOVER + "&sort_by=" + sortCriteria + "&page=" + page++);
+                    if(CheckNetworkConnection.isNetworkAvailable(MainActivity.this))
+                        new DiscoverMovies().execute(AppConstants.BASE_PATH_DISCOVER + "&sort_by=" + sortCriteria + "&page=" + page++);
+                    else
+                        emptyView.setText(R.string.str_no_internet);
                     break;
 
                 case R.id.favourites:
                     sortCriteria = "--";
+                    isOfflineOrFav = true;
                     Cursor c = getContentResolver().query(MovieContract.Favourites.CONTENT_URI, null, null, null, null);
                     if(c != null) {
                         while (c.moveToNext()) {

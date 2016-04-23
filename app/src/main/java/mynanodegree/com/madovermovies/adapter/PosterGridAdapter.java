@@ -29,6 +29,7 @@ public class PosterGridAdapter extends BaseAdapter {
     private boolean isOfflineOrFav;
 
     public PosterGridAdapter(Activity activity, ArrayList<MovieData> posterData, boolean isOfflineOrFav) {
+
         this.activity = activity;
         this.posterData = posterData;
         this.isOfflineOrFav = isOfflineOrFav;

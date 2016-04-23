@@ -1,33 +1,48 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:baselineAligned="false"
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
-    android:showDividers="middle"
-    tools:context="mynanodegree.com.madovermovies.MovieListActivity">
+    android:showDividers="middle">
 
     <!--
     This layout is a two-pane layout for the Movies
     master/detail flow.
     -->
-
-    <GridView
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@android:id/empty"
+        android:textSize="24sp"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:layout_width="360dp"
         android:layout_height="match_parent"
-        android:id="@+id/gridPosters"
-        android:numColumns="auto_fit"
-        android:columnWidth="150dp"
-        android:horizontalSpacing="0dp"
-        android:verticalSpacing="0dp"
-        android:stretchMode="columnWidth" />
+        android:text="@string/str_refreshing" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="360dp"
+        android:layout_height="match_parent"
+        android:id="@+id/swipeToRefresh">
+
+        <GridView
+            android:layout_width="360dp"
+            android:layout_height="match_parent"
+            android:id="@+id/gridPosters"
+            android:numColumns="auto_fit"
+            android:columnWidth="150dp"
+            android:horizontalSpacing="0dp"
+            android:verticalSpacing="0dp"
+            android:stretchMode="columnWidth" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <FrameLayout
         android:id="@+id/movie_detail_container"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="3" />
+        android:layout_marginLeft="360dp"
+        android:layout_marginStart="360dp"/>
 
-</LinearLayout>
+</RelativeLayout>

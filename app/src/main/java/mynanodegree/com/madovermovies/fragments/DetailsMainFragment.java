@@ -75,7 +75,17 @@ public class DetailsMainFragment extends Fragment implements AppBarLayout.OnOffs
         imageScrim = (ImageView) rootView.findViewById(R.id.imageScrim);
         markAsFav = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fragTabHost = (FragmentTabHost) rootView.findViewById(android.R.id.tabhost);
-        markAsFav.setVisibility(View.INVISIBLE);
+        markAsFav.setVisibility(View.GONE);
+
+        if(!getActivity().getLocalClassName().equals("activities.MainActivity")) {
+            toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.back));
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().finish();
+                }
+            });
+        }
 
         toolbar.setTitle(movieData.getTitle());
 
@@ -83,7 +93,7 @@ public class DetailsMainFragment extends Fragment implements AppBarLayout.OnOffs
         new ReviewsFetch().execute(AppConstants.BASE_REVIEWS_PATH.replace("**", movieData.getId()));
 
         if(CheckNetworkConnection.isNetworkAvailable(getActivity()) && !isOfflineOrFav) {
-            Picasso.with(getActivity()).load(AppConstants.BASE_IMAGE_PATH + movieData.getBackdrop_path()).placeholder(R.color.colorAccent).error(R.mipmap.ic_launcher).into(imageDrop);
+            Picasso.with(getActivity()).load(AppConstants.BASE_IMAGE_PATH + movieData.getBackdrop_path()).placeholder(R.color.colorAccent).error(R.drawable.app_ico).into(imageDrop);
         } else if(isOfflineOrFav) {
             Cursor cursor = getActivity().getContentResolver().query(MovieContract.Favourites.CONTENT_URI, null, MovieContract.Favourites.MOVIE_ID + "=" + movieData.getId(), null, null);
             if(cursor != null && cursor.moveToFirst()) {
@@ -91,7 +101,7 @@ public class DetailsMainFragment extends Fragment implements AppBarLayout.OnOffs
                 cursor.close();
             }
         } else {
-            Snackbar.make(imageDrop, "Cannot load poster.. Check internet connection", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(imageDrop, R.string.str_cant_load_poster, Snackbar.LENGTH_LONG).show();
         }
         AppBarLayout appBarLayout = (AppBarLayout) rootView.findViewById(R.id.app_bar);
         appBarLayout.addOnOffsetChangedListener(this);
@@ -100,6 +110,8 @@ public class DetailsMainFragment extends Fragment implements AppBarLayout.OnOffs
         fragBundle.putParcelable("MovieData", movieData);
 
         fragTabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
+        fragTabHost.getTabWidget().setBackgroundColor(Color.parseColor("#2C2C2C"));
+
         fragTabHost.addTab(fragTabHost.newTabSpec("FragSynopsis").setIndicator("Synopsis"), MovieDetailFragment.class, fragBundle);
 
         alterTabTextColors();
@@ -107,7 +119,6 @@ public class DetailsMainFragment extends Fragment implements AppBarLayout.OnOffs
         markAsFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(markAsFav, "Already added to favourites..", Snackbar.LENGTH_SHORT).show();
                 Cursor c = getActivity().getContentResolver().query(MovieContract.Favourites.CONTENT_URI, null, MovieContract.Favourites.MOVIE_ID + "=" + movieData.getId(), null, null);
                 if(c != null && c.getCount() == 0) {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -116,31 +127,36 @@ public class DetailsMainFragment extends Fragment implements AppBarLayout.OnOffs
                         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
                         byte[] dropArr = baos.toByteArray();
 
-                        ContentValues values = new ContentValues();
-                        values.put(MovieContract.Favourites.POSTER, getArguments().getByteArray("poster"));
-                        values.put(MovieContract.Favourites.OVERVIEW, movieData.getOverview());
-                        values.put(MovieContract.Favourites.RELEASE_DATE, movieData.getRelease_date());
-                        values.put(MovieContract.Favourites.MOVIE_ID, movieData.getId());
-                        values.put(MovieContract.Favourites.ORIGINAL_TITLE, movieData.getOriginal_title());
-                        values.put(MovieContract.Favourites.TITLE, movieData.getTitle());
-                        values.put(MovieContract.Favourites.BACKDROP, dropArr);
-                        values.put(MovieContract.Favourites.POPULARITY, movieData.getPopularity());
-                        values.put(MovieContract.Favourites.VOTE_COUNT, movieData.getVote_count());
-                        values.put(MovieContract.Favourites.VOTE_AVERAGE, movieData.getVote_average());
-
-                        String keyAndName[] = keys.get(0).split("\\|");
-
-                        ContentValues trailerVals = new ContentValues();
-                        trailerVals.put(MovieContract.Trailers.NAME, keyAndName[1]);
-                        trailerVals.put(MovieContract.Trailers.VKEY, keyAndName[0]);
-                        trailerVals.put(MovieContract.Trailers.MOVIE_ID, movieData.getId());
-
-                        ContentValues reviewVals = new ContentValues();
-
                         try {
                             ContentResolver resolver = getActivity().getContentResolver();
+                            ContentValues values = new ContentValues();
+
+                            values.put(MovieContract.Favourites.POSTER, getArguments().getByteArray("poster"));
+                            values.put(MovieContract.Favourites.OVERVIEW, movieData.getOverview());
+                            values.put(MovieContract.Favourites.RELEASE_DATE, movieData.getRelease_date());
+                            values.put(MovieContract.Favourites.MOVIE_ID, movieData.getId());
+                            values.put(MovieContract.Favourites.ORIGINAL_TITLE, movieData.getOriginal_title());
+                            values.put(MovieContract.Favourites.TITLE, movieData.getTitle());
+                            values.put(MovieContract.Favourites.BACKDROP, dropArr);
+                            values.put(MovieContract.Favourites.POPULARITY, movieData.getPopularity());
+                            values.put(MovieContract.Favourites.VOTE_COUNT, movieData.getVote_count());
+                            values.put(MovieContract.Favourites.VOTE_AVERAGE, movieData.getVote_average());
+
                             resolver.insert(MovieContract.Favourites.CONTENT_URI, values);
-                            resolver.insert(MovieContract.Trailers.CONTENT_URI, trailerVals);
+
+                            if (!keys.isEmpty()) {
+                                String keyAndName[] = keys.get(0).split("\\|");
+
+                                ContentValues trailerVals = new ContentValues();
+                                trailerVals.put(MovieContract.Trailers.NAME, keyAndName[1]);
+                                trailerVals.put(MovieContract.Trailers.VKEY, keyAndName[0]);
+                                trailerVals.put(MovieContract.Trailers.MOVIE_ID, movieData.getId());
+
+                                resolver.insert(MovieContract.Trailers.CONTENT_URI, trailerVals);
+                            }
+
+                            ContentValues reviewVals = new ContentValues();
+
                             for (int i = 0; i < reviews.size(); i++) {
                                 String arr[] = reviews.get(i).split("\\|");
                                 reviewVals.put(MovieContract.Reviews.ID_REVIEWS, arr[0]);
@@ -149,15 +165,17 @@ public class DetailsMainFragment extends Fragment implements AppBarLayout.OnOffs
                                 reviewVals.put(MovieContract.Reviews.MOVIE_ID, movieData.getId());
                                 resolver.insert(MovieContract.Reviews.CONTENT_URI, reviewVals);
                             }
-                            Snackbar.make(markAsFav, "Added to Favourites..", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(fragTabHost, R.string.str_added_to_favs, Snackbar.LENGTH_SHORT).show();
                         } catch (SQLException | UnsupportedOperationException e) {
-                            Snackbar.make(markAsFav, "Failed to add to Favourites..", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(fragTabHost, R.string.str_failed_to_add, Snackbar.LENGTH_SHORT).show();
                         }
 
                         c.close();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                } else {
+                    Snackbar.make(fragTabHost, R.string.str_already_in_favs, Snackbar.LENGTH_SHORT).show();
                 }
             }
         });

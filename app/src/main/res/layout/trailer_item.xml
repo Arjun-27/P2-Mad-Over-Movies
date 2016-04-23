@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:descendantFocusability="blocksDescendants"
+    android:layout_margin="@dimen/fragment_content_margin"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -17,7 +17,6 @@
         android:layout_gravity="center"
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
-        android:minLines="2"
         android:layout_weight="1"
         android:textSize="18sp"
         android:text="Medium Text"

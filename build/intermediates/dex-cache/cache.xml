@@ -1,2 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
+
+    <item
+        jar="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="6cbc7773921fcfedbe55657578f0cbfe614778dc">
+        <dex dex="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.1.1_7e1022cd2fa7836d42b87ff613e435a25dff2e83/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Arjun/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.1.1/support-annotations-23.1.1.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="8d680ba5a623724d1fb0e81c36a790f023a6cede">
+        <dex dex="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.1.1_bef4891372a71743ddc7486b1f00883bec264c48/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/jars/libs/internal_impl-23.1.1.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="a4de9c81ae239414e1ed0f86441b02abaf29bca9">
+        <dex dex="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.1.1_b65d34194eb9f45a57a4e5c32127e2010a8ad9e2/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Arjun/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.5.2/7446d06ec8d4f7ffcc53f1da37c95f200dcb9387/picasso-2.5.2.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/picasso-2.5.2_9ae281cafc160fda67b57136e8d3586569e1ce58/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/exploded-aar/com.android.support/design/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="379471b2bd17d9737c050345c08e8c7d16589784">
+        <dex dex="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-23.1.1_37082e519f6ece91e3ee6839d6506373117014ab/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="85246cd66ccc51b5a4e02422bbf1fb2e6688bf22">
+        <dex dex="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_d34bc082d15f1427198c333d5cf9d0fae9e3b54c/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
+        <dex dex="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.1.1_93b42946245cae5ae632f6855ebc51eaff70db76/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="4eeb495bb73537dda29b59aa8f861fac480a9f24">
+        <dex dex="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_713704ff62f4ad8fcbcb8ad823920429dc73b954/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
+        <dex dex="/Users/Arjun/Documents/NanoDegree/MadOverMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-23.1.1_48f3f149894e9b47f5fb991b1c24179fa9f632a4/classes.dex" />
+    </item>
+
+</items>

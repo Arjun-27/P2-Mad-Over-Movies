@@ -12,4 +12,13 @@
     <string name="title_movie_list">Movies</string>
     <string name="title_movie_detail">Movie Detail</string>
     <string name="str_favourites">Favourites</string>
+    <string name="str_no_internet">No Internet Connection</string>
+    <string name="str_cant_load_movies">Cannot load more movies...</string>
+    <string name="str_share_trailer">Share trailer...</string>
+    <string name="str_app_share">\n\n --MadOverMovies :D</string>
+    <string name="str_cant_load_poster">Cannot load poster.. Check internet connection</string>
+    <string name="str_added_to_favs">Added to Favourites..</string>
+    <string name="str_failed_to_add">Failed to add to Favourites..</string>
+    <string name="str_already_in_favs">Already added to favourites..</string>
+    <string name="str_refreshing">LOADING...</string>
 </resources>
